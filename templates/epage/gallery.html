@@ -1,0 +1,151 @@
+{% extends 'epage/base.html' %}
+{% load static %}
+{% block head %}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    .mainarea {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* .container{
+	width:90%
+	margin:10px auto;
+} */
+    .portfolio-menu {
+        text-align: center;
+    }
+
+    .portfolio-menu ul li {
+        display: inline-block;
+        margin: 0;
+        list-style: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        -webkit-transition: all 05s ease;
+        -moz-transition: all 05s ease;
+        -ms-transition: all 05s ease;
+        -o-transition: all 05s ease;
+        transition: all .5s ease;
+    }
+
+    /* .portfolio-item {
+        width:100%;
+    } */
+
+    .portfolio-item .item {
+        /*width:303px;*/
+        float: left;
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block title %}
+<title>editor - gallery</title>
+{% endblock %}
+
+{% block mainbody %}
+{% if msg %}
+<div class="alert alert-primary alert-dismissible fade show" role="alert">
+    <strong>{{msg}}</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 text-center my-2">
+            <h2 class="text-danger mb-2">Image Gallery</h2>
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Add Image
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Image</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="/editor/new-image" method="post" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                {% csrf_token %}
+                                <div class="modal-body my-2">
+                                    <input type="file" class="form-control my-1" id="imageInput" name="image" accept="image/*">
+                                    <div class="mt-2" style="text-align: left;">
+
+                                        <label for="category" class="form-label mb-1">Category: </label>
+                                        <select name="category" id="category" class="form-control my-1">
+                                            {% for item in categories %}
+                                            <option value="{{item.category}}">{{item.category}}</option>
+                                            {% endfor %}
+                                            <option value="{{category}}" selected hidden>{{category}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <!-- <button type="button" class="btn btn-primary" onclick="createUser()">Create</button>  -->
+                                <input type="submit" value="Add" class="btn btn-primary">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="portfolio-menu mt-2 mb-4">
+        <ul>
+            <li class="btn btn-outline-dark active" data-filter="*">All</li>
+            {% for item in categories %}
+            <li class="btn btn-outline-dark" data-filter=".{{item.category}}">{{item.category}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="portfolio-item row">
+        {% for img in images %}
+        <div class="item {{img.category}} col-lg-3 col-md-4 col-6 col-sm">
+            <a href="{{img.url}}" class="fancylight popup-btn" data-fancybox-group="light">
+                <img class="img-fluid" src="{{img.url}}" alt="">
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extrascript %}
+<script>
+    $('.portfolio-menu ul li').click(function () {
+        $('.portfolio-menu ul li').removeClass('active');
+        $(this).addClass('active');
+
+        var selector = $(this).attr('data-filter');
+        $('.portfolio-item').isotope({
+            filter: selector
+        });
+        return false;
+    });
+    $(document).ready(function () {
+        var popup_btn = $('.popup-btn');
+        popup_btn.magnificPopup({
+            type: 'image',
+            gallery: {
+                enabled: true
+            }
+        });
+    });
+</script>
+{% endblock %}

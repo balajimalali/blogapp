@@ -1,0 +1,36 @@
+{% extends 'epage/base.html' %}
+
+{% block head %}
+<style>
+    #newp{
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+    }
+</style>
+{% endblock %}
+{% block title %}
+<title>editor</title>
+{% endblock %}
+
+{% block mainbody %}
+
+<div id="newp">
+    <a href="/editor/new" class="btn btn-warning mt-3">New Post</a>
+</div>
+{% for post in posts %}
+
+<div class="card my-4">
+    <div class="card-body">
+      <h5 class="card-title">{{post.title}}</h5>
+      <p class="card-text">{{post.desc}}</p>
+      <a href="/editor/post/{{post.slug}}" class="btn btn-primary">Edit</a>
+    </div>
+  </div>
+
+{% endfor %}
+
+{% endblock %}
+
+{% block extrascript %}
+{% endblock %}

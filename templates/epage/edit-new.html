@@ -1,0 +1,103 @@
+{% extends 'epage/base.html' %}
+{% block head %}
+{{form.media}}
+<style>
+    .fieldWrapper {
+        padding-top: 10px;
+    }
+
+    .fieldWrapper>input,
+    select {
+        width: 100%;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid rgb(62, 184, 112);
+        text-align: center;
+    }
+
+    label {
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    select {
+        max-width: 200px;
+    }
+
+    .flex {
+        display: flex;
+        width: 100%;
+        justify-content: right;
+    }
+
+    #id_desc {
+        text-align: left;
+    }
+</style>
+{% endblock %}
+{% block title %}
+<title>editor - dashboard</title>
+{% endblock %}
+
+{% block mainbody %}
+<!-- <div class="flex">
+        <a href="/editor/preview" target="_blank" class="preview">Live Preview</a>
+    </div> -->
+<form method="post"  onsubmit="setFormSubmitting()">
+    {% csrf_token %}
+    <div class="form-check form-switch mt-3">
+        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="status" {% if is_pub %} checked {% endif %}>
+        <label class="form-check-label" for="flexSwitchCheckDefault"><strong>Published</strong> (check and save to
+            publish the post)</label>
+    </div>
+
+    {% for field in form %}
+    <div class="fieldWrapper my-2">
+        {{ field.errors }}
+        {{ field.label_tag }}
+        {{ field }}
+    </div>
+    {% endfor %}
+
+    <label for="category">Category: </label>
+    <select name="category" id="category" class="my-2">
+        {% for item in categories %}
+        <option value="{{item.category}}">{{item.category}}</option>
+        {% endfor %}
+        <option value="{{category}}" selected hidden>{{category}}</option>
+    </select>
+    <br>
+
+    <div class="d-flex w-100 flex-row-reverse">
+        <input type="submit" value="Save" class="btn btn-outline btn-success my-2  me-5">
+    </div>
+</form>
+{% endblock %}
+
+{% block extrascript %}
+<script>
+
+    var formSubmitting = false;
+    var setFormSubmitting = function () { formSubmitting = true; };
+
+    window.onload = function () {
+        window.addEventListener("beforeunload", function (e) {
+            if (formSubmitting) {
+                return undefined;
+            }
+
+            var confirmationMessage = 'It looks like you have been editing something. '
+                + 'If you leave before saving, your changes will be lost.';
+
+            (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+            return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+        });
+    };
+
+
+    // setInterval(() => {
+    //     localStorage.setItem('b_title',document.getElementById('id_title').value)
+    //     localStorage.setItem('b_body',document.getElementById('id_body').value)
+    // }, 2000);
+</script>
+{% endblock %}

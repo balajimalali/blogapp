@@ -1,0 +1,151 @@
+:root{
+    /* --nav: #b3edf573;
+    --bb: azure;
+    --shadow: inset -2px -2px 4px 1px #d3e3d3;
+    --border: 0.5px solid rgb(201, 199, 199); */
+    --nav: rgba(245, 245, 245, 0.226);
+    --bb: white;
+    --shadow: inset -2px -2px 4px 1px #c9c9c921;
+    --border: 0.5px solid rgb(243, 243, 243);
+}
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.branding {
+    margin-left: 10%;
+    color: purple;
+    font-size: xx-large;
+    font-weight: bolder;
+}
+
+#top-nav {
+    width: 100%;
+    background-color: var(--nav);
+    box-shadow: var(--shadow);
+    border: var(--border);
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.verticle-align-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+#left-nav {
+    position: absolute;
+    width: 15%;
+    background-color: var(--nav);
+    box-shadow: var(--shadow);
+    border: var(--border);
+    border-top: none;
+    text-align: center;
+    /* padding-top: 2%;
+    padding-bottom: 2%; */
+    min-height: 100vh;
+}
+
+#left-nav>hr{
+    margin: 5%;
+    background-color: rgb(201, 199, 199);
+}
+
+.dark-mode{
+    margin-top: 10%;
+}
+
+.check-box {
+    width: 30px;
+    height: 20px;
+    border-radius: 50px;
+    background-color: rgb(151, 139, 125);
+    cursor: pointer;
+    display: inline-flex;
+}
+
+.circle {
+    transition-duration: 200ms;
+    margin-left: 0px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50px;
+    background-color: white;
+}
+
+.lg-text {
+    font-size: larger;
+}
+
+a{
+    text-decoration: none;
+}
+
+.category{
+    margin-top: 20px;
+    width: 80%;
+    margin-left: 20%;
+    display: flex;
+    color: black;
+    font-size: larger;
+}
+
+.cat-img{
+    margin-right: 5%;
+}
+
+.cat-img>img{
+    width: 30px;
+    height: 30px;
+    border-radius: 20px;
+}
+
+.vc{
+    display: inline;
+    vertical-align: super;
+}
+
+#mainarea{
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--bb);
+}
+#search{
+    margin-right: 5%;
+    width: 20%;
+}
+#search>input{
+    height: 60%;
+    width: 100%;
+    font-size: larger;
+    border-radius: 20px;
+    border: 1px solid gold;
+    background-color: chartreuse;
+    padding-left: 10px;
+}
+
+@media only screen and (max-width: 800px) {
+    .right{
+        display: none;
+    }
+
+    #left-nav{
+        display: none;
+    }
+
+    #search{
+        width: 200px;
+    }
+
+    .con{
+        margin-right: 5% !important;
+        margin-left: 5% !important;
+    }
+}

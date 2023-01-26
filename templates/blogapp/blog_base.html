@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'blogapp/css/base.css' %}">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"> -->
+    {% block title %}
+    <title>b- blog</title>
+    {% endblock %}
+    {% block head %}
+    {% endblock %}
+</head>
+{% block style %}
+{% endblock %}
+<style>
+
+</style>
+
+<body>
+
+    <nav id="top-nav">
+
+            <div class="verticle-align-center branding">
+                B Blog
+            </div>
+   
+            <div class="search verticle-align-center" id="search">
+                <input type="text" placeholder="search">
+        </div>
+    </nav>
+
+    <div id="left-nav">
+
+        <!-- <div class="dark-mode">
+            <div class="lg-text vc">
+                Dark Mode
+            </div>
+            <div class="check-box" onclick="mode()">
+                <div class="circle" id="dark"></div>
+            </div>
+        </div> -->
+
+        <hr>
+        <a href="/">
+
+            <div class="category">
+                <div class="cat-img" style="display: inline-flex;">
+                    <img src="https://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png" alt="">
+                </div>
+                <div class="text vc">Home</div>
+            </div>
+        </a>
+
+        {% for i in categories %}
+        <a href="/{{i.category}}">
+
+            <div class="category">
+                <div class="cat-img" style="display: inline-flex;">
+                    {% if i.img %}
+                    <img src="{{i.img.url}}" alt="">
+                    
+                    {% else %}
+                    <img src="https://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png" alt="">
+                    {% endif %}
+                </div>
+                <div class="text vc">{{i.category}}</div>
+            </div>
+        </a>
+        {% endfor %}
+            <hr>
+            
+        </div>
+
+    <div id="mainarea">
+
+        {% block body %}
+        {% endblock %}
+    </div>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script> -->
+    {% block script %}
+    {% endblock %}
+</body>
+<script>
+    let isDark = false;
+    let dark = document.getElementById("dark")
+    let body = document.getElementsByTagName("body")[0]
+
+    function mode() {
+        if (isDark) {
+            dark.style.marginLeft = '0px'
+            isDark = false;
+            body.style.backgroundColor = 'white'
+        }
+        else {
+            dark.style.marginLeft = '10px'
+            isDark = true;
+            body.style.backgroundColor = 'black'
+        }
+    }
+
+
+</script>
+
+</html>

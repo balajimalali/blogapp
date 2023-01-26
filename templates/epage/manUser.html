@@ -1,0 +1,86 @@
+{% extends 'epage/base.html' %}
+{% block head %}
+<style>
+</style>
+{% endblock %}
+
+{% block title %}
+<title>editor - users</title>
+{% endblock %}
+
+{% block mainbody %}
+<div class="manUser">
+
+    {% if msg %}
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <strong>{{msg}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Create User
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Create new user</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/editor/create" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <input type="text" class="form-control my-1" id="username" name="username"
+                            placeholder="username">
+                        <input type="email" class="form-control my-1" id="email" aria-describedby="emailHelp"
+                            name="email" placeholder="Enter email">
+                        <input type="password" class="form-control my-1" id="password" name="password"
+                            placeholder="Password">
+                        <input type="password" class="form-control my-1" id="confirmpassword" name="confirmpassword"
+                            placeholder="Confirm Password">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <!-- <button type="button" class="btn btn-primary" onclick="createUser()">Create</button>  -->
+                        <input type="submit" value="Create" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">e-mail</th>
+                    <th scope="col">Designation</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{user.username}}</td>
+                    <td>{{user.first_name}} {{user.last_name}}</td>
+                    <td>{{user.email}}</td>
+                    <td>Author</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrascript %}
+{% endblock %}

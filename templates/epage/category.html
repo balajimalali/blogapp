@@ -1,0 +1,73 @@
+{% extends 'epage/base.html' %}
+
+{% block head %}
+<style>
+</style>
+{% endblock %}
+
+{% block title %}
+<title>editor - categories</title>
+{% endblock %}
+
+{% block mainbody %}
+
+{% if msg %}
+<div class="alert alert-primary alert-dismissible fade show" role="alert">
+    <strong>{{msg}}</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Create Category
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Create new category</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/editor/create-category" method="post">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="modal-body my-2">
+                        <input type="text" class="form-control my-1" id="category" maxlength="250" name="category"
+                            placeholder="category">
+                        <textarea name="desc" id="desc" cols="30" rows="4" class="form-control my-1"
+                            placeholder="Description of the category"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <!-- <button type="button" class="btn btn-primary" onclick="createUser()">Create</button>  -->
+                    <input type="submit" value="Create" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% for item in categories %}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{item.category}}</h5>
+        <p class="card-text">{{item.desc}}</p>
+        <a href="/editor/post/{{post.slug}}" class="btn btn-primary">Go somewhere</a>
+    </div>
+</div>
+
+{% endfor %}
+
+
+{% endblock %}
+
+{% block extrascript %}
+{% endblock %}

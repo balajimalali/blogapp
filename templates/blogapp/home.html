@@ -1,0 +1,146 @@
+{% extends 'blogapp/blog_base.html' %}
+
+{% block title %}
+<title>b- blog</title>
+{% endblock %}
+{% block head %}
+{% endblock %}
+
+{% block style %}
+<style>
+    .con{
+        margin-left: 20%;
+        /* margin-right: 20%; */
+        padding-top: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .post{
+        background-color: var(--nav);
+        border-radius: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        border: var(--border);
+        box-shadow: var(--shadow);
+    }
+
+    .post h3{
+        padding-top: 1%;
+        padding-bottom: 1%;
+        padding-left: 2%;
+        padding-right: 2%;
+        color: darkmagenta;
+    }
+    .post>p{
+        padding-top: 1%;
+        padding-bottom: 1%;
+        padding-left: 2%;
+        padding-right: 2%;  
+        text-align: justify;
+    }
+
+    .right{
+        width:  30%; /* 60%; */
+        /* background-color: var(--nav); */
+        margin-top: 15px;
+        margin-left: 5%;
+        margin-right: 5%;
+        border-radius: 10px;
+        /* border: var(--border); */
+    }
+
+    #carousel{
+        /* border: var(--border); */
+        display: flex;
+        justify-content: center;
+        height: 60vh;
+    }
+
+    .img{
+        width: 100%;
+        display: none;
+        transition-duration: 500ms;
+        transition-delay: 1s;
+        opacity: 0;
+
+    }
+
+    .img>h3{
+        width: 80%;
+        margin: auto;
+        color: aliceblue;
+        text-align: center;
+        position: relative;
+        transform: translateY(-110%);
+    }
+
+    .img>img{
+        width: 100%; 
+        height: 60vh;  /*40vh*/
+        border-radius: 10px;
+    }
+
+    @media only screen and (max-width: 800px){
+        #carousel{
+            height: 40vh;
+        }
+
+        .img>img{
+            height: 40vh;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="con">
+    <div class="main">
+        <div id="carousel">
+            {% for i in carousel %}
+            <div class="img">
+                <img src="{{i.img.url}}" alt="">
+                <h3>{{i.title}}</h3>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% for post in posts %}
+        
+        <div class="post">
+                <a href="/{{post.category.category}}/{{post.slug}}">
+                    <h3>{{ post.title }}</h3>
+                </a>
+                <p>{{ post.desc }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="right">
+        
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    let imgs = document.getElementById('carousel').children;
+    let iml = imgs.length
+    function carousel(i){
+        
+        // imgs[(i-1+iml)%iml].style.zIndex = '0'; 
+        // imgs[i%iml].style.zIndex = '3';
+        imgs[(i-1+iml)%iml].style.display = 'none';
+        imgs[i%iml].style.display = 'block';
+        imgs[(i-1+iml)%iml].style.opacity = '0';
+        imgs[i%iml].style.opacity = '1';
+
+    }
+
+    let i = 1;
+    carousel(0)
+    setInterval(() => {
+        carousel(i)
+        i++;
+    }, 5000);
+</script>
+{% endblock %}

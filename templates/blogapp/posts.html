@@ -1,0 +1,60 @@
+{% extends 'blogapp/blog_base.html' %}
+
+
+{% block title %}
+<title>b- {{ctg}}</title>
+{% endblock %}
+{% block head %}
+{% endblock %}
+
+{% block style %}
+<style>
+        .post{
+        background-color: var(--nav);
+        border-radius: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        border: var(--border);
+        box-shadow: var(--shadow);
+    }
+
+    .post h3{
+        padding-top: 1%;
+        padding-bottom: 1%;
+        padding-left: 2%;
+        padding-right: 2%;
+        color: darkmagenta;
+    }
+    .post>p{
+        padding-top: 1%;
+        padding-bottom: 1%;
+        padding-left: 2%;
+        padding-right: 2%;  
+        text-align: justify;
+    }
+
+    .content{
+        margin-left: 20%;
+        margin-right: 25%;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <div class="posts">
+        {% for post in posts %}
+        
+        <div class="post">
+                <a href="/{{post.category.category}}/{{post.slug}}">
+                    <h3>{{ post.title }}</h3>
+                </a>
+                <p>{{ post.desc }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

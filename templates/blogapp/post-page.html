@@ -1,0 +1,40 @@
+{% extends 'blogapp/blog_base.html' %}
+
+
+{% block title %}
+<title>b- {{ctg}}</title>
+{% endblock %}
+{% block head %}
+{% endblock %}
+
+{% block style %}
+<style>
+    .content{
+        margin-left: 20%;
+        margin-right: 25%;
+    }
+
+    .post{
+        margin-top: 20px;
+    }
+    
+    #title{
+        margin-top: 10px;
+        margin-bottom: 20px;
+        color: blueviolet;
+    }
+    
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <div class="post">
+        <h1 id="title">{{post.title}}</h1>
+        <p>{{post.body|safe}}</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
