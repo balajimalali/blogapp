@@ -19,7 +19,7 @@ def home(request):
 
 def ctg(request, ctg):
 
-    posts = Post.objects.filter(status='published', category= Category.objects.filter(category=ctg)[0])
+    posts = Post.objects.filter(status='published', category= get_object_or_404(Category ,category=ctg))
     categories = Category.objects.all().exclude(category='Default')
 
     params = {
