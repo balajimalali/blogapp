@@ -23,9 +23,11 @@
 <body>
 
     <nav id="top-nav">
-
-            <div class="verticle-align-center branding">
-                B Blog
+        <div id="menu" class="verticle-align-center" onclick="togglenav()">
+            <img src="{% static 'img/menu.png' %}" width="25px" height="25px" alt="">
+        </div>
+        <div class="verticle-align-center branding">
+                <span>B Blog</span>
             </div>
    
             <div class="search verticle-align-center" id="search">
@@ -99,6 +101,23 @@
             dark.style.marginLeft = '10px'
             isDark = true;
             body.style.backgroundColor = 'black'
+        }
+    }
+
+
+    let closed = true;
+    let leftnav = document.getElementById("left-nav")
+
+    function togglenav() {
+        if (closed) {
+            leftnav.style.display = 'block';
+            leftnav.style.width = '50%';
+            closed = false;
+        }
+        else {
+            closed = true;
+            leftnav.style.display = 'none';
+            leftnav.style.width = '0%';
         }
     }
 

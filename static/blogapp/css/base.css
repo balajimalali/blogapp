@@ -23,6 +23,7 @@
 #top-nav {
     width: 100%;
     background-color: var(--nav);
+    /* background-color: blueviolet; */
     box-shadow: var(--shadow);
     border: var(--border);
     border-left: none;
@@ -131,6 +132,15 @@ a{
     padding-left: 10px;
 }
 
+#menu{
+    display: none;
+}
+
+
+#con-body *{
+    padding: 5px !important;
+}
+
 @media only screen and (max-width: 800px) {
     .right{
         display: none;
@@ -138,14 +148,28 @@ a{
 
     #left-nav{
         display: none;
+        width: 0%;
+        background-color: blueviolet;
+        z-index: 5;
+        transition-duration: 500ms;
+        overflow: hidden;
     }
 
     #search{
-        width: 200px;
+        width: 25%;
     }
 
     .con{
         margin-right: 5% !important;
         margin-left: 5% !important;
+    }
+
+    #menu{
+        display: flex;
+        margin-left: 5%;
+    }
+
+    .branding{
+        margin-left: 0;
     }
 }

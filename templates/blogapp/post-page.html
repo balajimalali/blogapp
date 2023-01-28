@@ -23,6 +23,20 @@
         margin-bottom: 20px;
         color: blueviolet;
     }
+
+    @media only screen and (max-width: 800px) {
+        .content{
+            margin-right: 0;
+            margin-left: 0;
+            padding: 5%;
+            text-align: justify;
+            overflow-wrap: break-word;
+        }
+
+        .content img{
+            width: 100%;
+        }
+    }
     
 </style>
 {% endblock %}
@@ -31,7 +45,7 @@
 <div class="content">
     <div class="post">
         <h1 id="title">{{post.title}}</h1>
-        <p>{{post.body|safe}}</p>
+        <div id="con-body">{{post.body|safe}}</div>
     </div>
 </div>
 {% endblock %}
