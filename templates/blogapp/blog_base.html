@@ -6,6 +6,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/b.png' %}" type="image/x-icon">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <link rel="stylesheet" href="{% static 'blogapp/css/base.css' %}">
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"> -->
     {% block title %}
@@ -17,21 +19,28 @@
 {% block style %}
 {% endblock %}
 <style>
-
+*{
+    font-family: 'Poppins';
+}
 </style>
 
 <body>
 
     <nav id="top-nav">
+        
         <div id="menu" class="verticle-align-center" onclick="togglenav()">
             <img src="{% static 'img/menu.png' %}" width="25px" height="25px" alt="">
         </div>
         <div class="verticle-align-center branding">
-                <span>B Blog</span>
-            </div>
-   
-            <div class="search verticle-align-center" id="search">
-                <input type="text" placeholder="search">
+            <span>B Blog</span>
+        </div>
+<!-- 
+        <div class="search verticle-align-center" id="search">
+            <input type="text" placeholder="search">
+        </div> -->
+
+        <div class="nav-right verticle-align-center">
+            <a href="/editor" class="btn verticle-align-center" style="border: 1px solid rgb(233, 34, 8); height: 30px; display: inline-flex; margin-right: 10px; border-radius: 10px; background-color: rgb(23, 237, 245); cursor: pointer; padding: 5px;" >Dashboard</a>
         </div>
     </nav>
 
@@ -58,13 +67,13 @@
         </a>
 
         {% for i in categories %}
-        <a href="/{{i.category}}">
+        <a href="/sort/{{i.category}}">
 
             <div class="category">
                 <div class="cat-img" style="display: inline-flex;">
                     {% if i.img %}
                     <img src="{{i.img.url}}" alt="">
-                    
+
                     {% else %}
                     <img src="https://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png" alt="">
                     {% endif %}
@@ -73,9 +82,9 @@
             </div>
         </a>
         {% endfor %}
-            <hr>
-            
-        </div>
+        <hr>
+
+    </div>
 
     <div id="mainarea">
 
@@ -110,17 +119,16 @@
 
     function togglenav() {
         if (closed) {
-            leftnav.style.display = 'block';
             leftnav.style.width = '50%';
+            // leftnav.style.display = 'block';
             closed = false;
         }
         else {
-            closed = true;
-            leftnav.style.display = 'none';
             leftnav.style.width = '0%';
+            // leftnav.style.display = 'none';
+            closed = true;
         }
     }
-
 
 </script>
 

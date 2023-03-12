@@ -19,8 +19,8 @@
     .post{
         background-color: var(--nav);
         border-radius: 10px;
-        margin-top: 15px;
-        margin-bottom: 15px;
+        margin-top: 20px;
+        margin-bottom: 20px;
         border: var(--border);
         box-shadow: var(--shadow);
     }
@@ -30,7 +30,7 @@
         padding-bottom: 1%;
         padding-left: 2%;
         padding-right: 2%;
-        color: darkmagenta;
+        color: purple;
     }
     .post>p{
         padding-top: 1%;
@@ -58,12 +58,9 @@
     }
 
     .img{
-        width: 100%;
-        display: none;
+        /* display: none; */
         transition-duration: 500ms;
-        transition-delay: 1s;
-        opacity: 0;
-
+        position: absolute;
     }
 
     .img>h3{
@@ -76,7 +73,7 @@
     }
 
     .img>img{
-        width: 100%; 
+        /* width: 100%;  */
         height: 60vh;  /*40vh*/
         border-radius: 10px;
     }
@@ -84,10 +81,17 @@
     @media only screen and (max-width: 800px){
         #carousel{
             height: 40vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .img{
+            width: 95%;
         }
 
         .img>img{
             height: 40vh;
+            width: 100%;
         }
     }
 </style>
@@ -104,11 +108,14 @@
             </div>
             {% endfor %}
         </div>
+        <div style="height: 20px;">
+
+        </div>
 
         {% for post in posts %}
         
         <div class="post">
-                <a href="/{{post.category.category}}/{{post.slug}}">
+                <a href="/fetch/{{post.category.category}}/{{post.slug}}">
                     <h3>{{ post.title }}</h3>
                 </a>
                 <p>{{ post.desc }}</p>
@@ -129,10 +136,10 @@
         
         // imgs[(i-1+iml)%iml].style.zIndex = '0'; 
         // imgs[i%iml].style.zIndex = '3';
-        imgs[(i-1+iml)%iml].style.display = 'none';
-        imgs[i%iml].style.display = 'block';
         imgs[(i-1+iml)%iml].style.opacity = '0';
         imgs[i%iml].style.opacity = '1';
+        // imgs[i%iml].style.display = 'block';
+        // imgs[(i-1+iml)%iml].style.display = 'none';
 
     }
 

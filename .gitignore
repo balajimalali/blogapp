@@ -1,3 +1,4 @@
 static/froala_editor
 blog_cms/settings.py
 db.sqlite3
+*.pyc

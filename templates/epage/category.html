@@ -20,9 +20,12 @@
 
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Create Category
-</button>
+<div class="container text-center">
+
+    <button type="button" class="btn btn-primary my-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Create Category
+    </button>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -56,7 +59,7 @@
 
 {% for item in categories %}
 
-<div class="card">
+<div class="card my-4">
     <div class="card-body">
         <h5 class="card-title">{{item.category}}</h5>
         <p class="card-text">{{item.desc}}</p>

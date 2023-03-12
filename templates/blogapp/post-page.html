@@ -13,6 +13,11 @@
         margin-left: 20%;
         margin-right: 25%;
     }
+    
+    #con-body{
+        font-size: larger;
+        margin-top: 20px;
+    }
 
     .post{
         margin-top: 20px;
@@ -20,8 +25,11 @@
     
     #title{
         margin-top: 10px;
-        margin-bottom: 20px;
-        color: blueviolet;
+        color: rgb(212, 15, 15);
+        font-size: 50px;
+    }
+    .content img{
+        width: 100%;
     }
 
     @media only screen and (max-width: 800px) {
@@ -45,6 +53,7 @@
 <div class="content">
     <div class="post">
         <h1 id="title">{{post.title}}</h1>
+        <p>-by {{post.author.get_full_name}} on {{post.updated}}</p>
         <div id="con-body">{{post.body|safe}}</div>
     </div>
 </div>

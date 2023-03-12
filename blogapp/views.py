@@ -10,7 +10,7 @@ from django.utils import timezone
 # Create your views here.
 
 def home(request):
-    posts = Post.objects.filter(status='published')
+    posts = Post.objects.filter(status='published')[:10]
     carousel = Carousel.objects.filter(exp__gte=timezone.now())
     # carousel = Carousel.objects.filter(exp__gte=datetime.datetime.now())
     categories = Category.objects.all().exclude(category='Default')

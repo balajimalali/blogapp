@@ -1,0 +1,201 @@
+{% extends 'epage/base.html' %}
+{% block head %}
+<style>
+    .cred {
+        margin-top: 0;
+    }
+
+    form input{
+        min-width: 250px;
+    }
+
+    .wdth{
+        width: 400px;
+    }
+</style>
+{% endblock %}
+
+{% block title %}
+<title>editor - profile</title>
+{% endblock %}
+
+{% block mainbody %}
+<div class="container">
+    <div class="middle text-center mt-2 text-primary">
+        <h2>Your Profile</h2>
+    </div>
+    <div class="cred mt-5">
+        <form action="/editor/profUpdate" method="post" id="profile">
+            {% csrf_token %}
+            <div class="Name">
+                <div id="fname" class="wdth mx-auto my-2">
+                    <label for="firstname">
+                        <h5>First Name :</h5>
+                    </label>
+                    <input type="text" name="firstname" id="firstname" class="border border-success rounded w-50"
+                        value="{{user.first_name}}">
+                </div>
+                <div id="lname" class="wdth mx-auto my-2">
+                    <label for="lastname">
+                        <h5>Last Name :</h5>
+                    </label>
+                    <input type="text" name="lastname" id="lastname" class="border border-success rounded w-50"
+                        value="{{user.last_name}}">
+                </div>
+                <div id="uname" class="wdth mx-auto my-2">
+                    <label for="username">
+                        <h5>User Name:</h5>
+                    </label>
+                    <input type="text" name="username" id="username" class="border border-success rounded w-25"
+                        value="{{user.username}}" onchange="fetchUserName()">
+                        <br>
+                    <p class="text-danger d-none" id="na" style="display: inline;">not available</p>
+                    <p class="text-danger d-none" id="err" style="display: inline;">Enter Proper Username</p>
+                    <p class="text-success d-none" id="avl" style="display: inline;">available</p>
+                </div>
+            </div>
+        </form>
+        <div class="continer d-flex justify-content-center mt-4">
+
+            <!-- <input type="submit" id="btn" class="btn btn-outline-primary" value="Update"> -->
+            <button class="btn btn-outline-primary" id="btn"
+                onclick="document.getElementById('profile').submit()">Update</button>
+        </div>
+    </div>
+    <div class="container mt-5 text-center" id="chpass">
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Change Password
+        </button>
+        <p id="chpass-msg"></p>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Change Password</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <!-- <form action="/editor/changepassword" id="chpass" method="post"> -->
+                        <div class="modal-body">
+                            <div class="modal-body my-2">
+                                <input type="password" class="form-control my-1" id="currp"
+                                    name="currp" placeholder="Current Password">
+                                <input type="password" class="form-control my-1" id="newp"
+                                    name="newp" placeholder="New Password">
+                                <input type="password" class="form-control my-1" id="confp"
+                                    name="confp" placeholder="confirm password" onkeyup="validate()">
+                                    <p id="msg" class="text-danger"></p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modal-close">Close</button>
+                            <!-- <button type="button" class="btn btn-primary" onclick="createUser()">Create</button>  -->
+                            <!-- <input type="submit" value="Change" id="pass" disabled class="btn btn-primary"> -->
+                            <button class="btn btn-primary" id="pass" disabled onclick="changePassword()">Change</button>
+                        </div>
+                    <!-- </form> -->
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extrascript %}
+<script>
+    err = document.getElementById('err')
+    avl = document.getElementById('avl')
+    na = document.getElementById('na')
+    function display(status) {
+        if (!err.classList.contains('d-none')) {
+            err.classList.add('d-none')
+        }
+        if (!avl.classList.contains('d-none')) {
+            avl.classList.add('d-none')
+        }
+        if (!na.classList.contains('d-none')) {
+            na.classList.add('d-none')
+        }
+        if (status === 'avl') {
+            avl.classList.remove('d-none')
+            document.getElementById('btn').disabled = false
+        }
+        if (status === 'na') {
+            na.classList.remove('d-none')
+            document.getElementById('btn').disabled = true
+        }
+        if (status === 'err') {
+            err.classList.remove('d-none')
+            document.getElementById('btn').disabled = true
+        }
+    }
+
+    function fetchUserName() {
+        let value = document.getElementById('username').value;
+        console.log(value)
+
+        fetch('/editor/checkUN', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{csrf_token}}",
+            },
+            body: JSON.stringify({ 'username': value })
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            display(data.status)
+        });
+    }
+
+
+    function validate(){
+        if(document.getElementById('newp').value===document.getElementById('confp').value){
+          document.getElementById('pass').disabled = false;
+          document.getElementById('msg').innerText = "";
+        }
+        else{
+          document.getElementById('pass').disabled = true;
+          document.getElementById('msg').innerText = "password and confirm password are not same.";
+        }
+      }
+
+
+    function changePassword(){
+        fetch('/editor/changepassword',{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{csrf_token}}",
+            },
+            body: JSON.stringify({
+                'current': document.getElementById("currp").value,
+                'new': document.getElementById("newp").value,
+                'confirm': document.getElementById("confp").value,
+            })
+        }).then(response=>{
+            return response.json();
+        }).then(data=>{
+            if(data.status===1){
+                document.getElementById('chpass-msg').innerText = 'Password Changed Successfully'
+                document.getElementById('chpass-msg').style.color = 'green'
+                setTimeout(() => {
+                    location.reload()
+                }, 1500);
+            }
+            else{
+                document.getElementById('chpass-msg').style.color = 'red'
+                document.getElementById('chpass-msg').innerText = 'Wrong Password'
+            }
+        })
+
+        document.getElementById('modal-close').click()
+    }
+</script>
+{% endblock %}

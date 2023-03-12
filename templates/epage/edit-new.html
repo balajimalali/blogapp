@@ -43,6 +43,9 @@
 <!-- <div class="flex">
         <a href="/editor/preview" target="_blank" class="preview">Live Preview</a>
     </div> -->
+    {% if error %}
+    {{error}}
+    {% endif %}
 <form method="post"  onsubmit="setFormSubmitting()">
     {% csrf_token %}
     <div class="form-check form-switch mt-3">

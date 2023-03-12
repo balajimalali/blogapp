@@ -3,10 +3,10 @@
     --bb: azure;
     --shadow: inset -2px -2px 4px 1px #d3e3d3;
     --border: 0.5px solid rgb(201, 199, 199); */
-    --nav: rgba(245, 245, 245, 0.226);
+    --nav: white;
     --bb: white;
-    --shadow: inset -2px -2px 4px 1px #c9c9c921;
-    --border: 0.5px solid rgb(243, 243, 243);
+    /* --shadow: inset -2px -2px 4px 1px #c9c9c921;
+    --border: 0.5px solid rgb(243, 243, 243); */
 }
 * {
     padding: 0;
@@ -22,14 +22,14 @@
 
 #top-nav {
     width: 100%;
-    background-color: var(--nav);
+    background-color: yellow;
     /* background-color: blueviolet; */
     box-shadow: var(--shadow);
     border: var(--border);
     border-left: none;
     border-right: none;
     border-top: none;
-    height: 50px;
+    height: 60px;
     display: flex;
     justify-content: space-between;
 }
@@ -141,15 +141,32 @@ a{
     padding: 5px !important;
 }
 
+@media only screen and (min-width: 800px) {
+    #left-nav {
+        position: absolute;
+        width: 15% !important;
+        background-color: var(--nav);
+        box-shadow: var(--shadow);
+        border: var(--border);
+        border-top: none;
+        text-align: center;
+        /* padding-top: 2%;
+        padding-bottom: 2%; */
+        min-height: 100vh;
+        transition-duration: 500ms;
+    }
+    
+}
+
 @media only screen and (max-width: 800px) {
     .right{
         display: none;
     }
 
     #left-nav{
-        display: none;
+        display: block;
         width: 0%;
-        background-color: blueviolet;
+        background-color: whitesmoke;
         z-index: 5;
         transition-duration: 500ms;
         overflow: hidden;

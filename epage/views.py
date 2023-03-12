@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import logout, login, authenticate
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from epage.forms import PostForm
 import json
 from blogapp.models import Post, Category, Image
 from django.utils.text import slugify
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
+from django.http import JsonResponse
 import os 
 
 def group_required(*group_names):
@@ -58,6 +59,7 @@ def posts(request):
 
 @group_required('Author', 'Administrator')
 def edit_post(request, post_slug):
+    error = None
     if request.method == "POST":
         form = PostForm(request.POST)
         post = Post.objects.get(slug=post_slug)
@@ -66,33 +68,38 @@ def edit_post(request, post_slug):
                 post.title = form.cleaned_data['title']
                 post.body = form.cleaned_data['body']
                 post.desc = form.cleaned_data['desc']
-            try:
-                if request.POST['status']=='on':
-                    post.status = 'published'
-            except:
-                post.status = 'draft'
 
-            post.category = Category.objects.get(category=request.POST['category'])
-            post.save()
-            return redirect('/editor/posts') 
+                try:
+                    if request.POST['status']=='on':
+                        post.status = 'published'
+                except:
+                    post.status = 'draft'
+
+                post.category = Category.objects.get(category=request.POST['category'])
+                post.save()
+                return redirect('/editor/posts')
+            else:
+                error = form.errors 
         else:
             return redirect('/editor/login')   
 
-    else:
-        post = Post.objects.get(slug = post_slug)
-        status = False
-        if post.status=='published':
-            status = True
-        params = {
-            'form': PostForm(initial={'title':post.title, 'body': post.body, 'desc':post.desc}),
-            'categories': Category.objects.all(),
-            'is_pub': status,
-            'category': post.category.category
-        }
-        return render(request, 'epage/edit-new.html',params)    
+
+    post = Post.objects.get(slug = post_slug)
+    status = False
+    if post.status=='published':
+        status = True
+    params = {
+        'form': PostForm(initial={'title':post.title, 'body': post.body, 'desc':post.desc}),
+        'categories': Category.objects.all(),
+        'is_pub': status,
+        'category': post.category.category,
+        'error': error
+    }
+    return render(request, 'epage/edit-new.html',params)    
 
 @group_required('Author', 'Administrator')
 def newPost(request):
+    error = None
     if request.method == "POST":
         form = PostForm(request.POST)
         post = Post()
@@ -102,32 +109,35 @@ def newPost(request):
             post.body = form.cleaned_data['body']
             post.desc = form.cleaned_data['desc']
 
-        i = 1
-        slug = slugify(form.cleaned_data['title'])
-        while Post.objects.filter(slug=slug).exists():
-            slug = slugify(form.cleaned_data['title']+' #'+str(i))
-            i = i+1
-        post.slug = slug
+            i = 1
+            slug = slugify(form.cleaned_data['title'])
+            while Post.objects.filter(slug=slug).exists():
+                slug = slugify(form.cleaned_data['title']+' #'+str(i))
+                i = i+1
+            post.slug = slug
 
-        try:
-            if request.POST['status']=='on':
-                post.status = 'published'
-        except:
-            post.status = 'draft'
-            
-        try:
-            post.category = Category.objects.get(category=request.POST['category'])
-        except:
-            post.category = Category.objects.get(category='Default')
-        post.save()
-        return redirect('/editor/posts') 
-    else:
-        form = PostForm()
-        params = {
-            'form': form,
-            'categories': Category.objects.all()
-        }
-        return render(request, 'epage/edit-new.html',params)
+            try:
+                if request.POST['status']=='on':
+                    post.status = 'published'
+            except:
+                post.status = 'draft'
+                
+            try:
+                post.category = Category.objects.get(category=request.POST['category'])
+            except:
+                post.category = Category.objects.get(category='Default')
+            post.save()
+            return redirect('/editor/posts') 
+        else:
+            error = form.errors
+
+    form = PostForm()
+    params = {
+        'form': form,
+        'categories': Category.objects.all(),
+        'error': error
+    }
+    return render(request, 'epage/edit-new.html',params)
 
 
 @group_required('Author', 'Administrator')
@@ -226,3 +236,72 @@ def signin(request):
             return redirect(request.POST['redirect'])
         else:
             return render(request, 'epage/login.html', {'error': 'enter correct credentials'})
+
+
+@group_required('Author', 'Administrator')
+def viewProfile(request):
+    params = {
+        'details': 'hello'
+    }
+    return render(request, 'epage/profile.html', params)
+
+
+# @group_required('Author', 'Administrator')
+def checkUN(request):
+    username = json.load(request)['username']
+    if len(username)!=0 and len(username.split(' '))==1:
+        users = User.objects.filter(username=username)
+        if users.exists() and request.user!=users[0]:
+            return JsonResponse({'status': 'na'})
+        else:
+            return JsonResponse({'status': 'avl'})
+    else:
+        return JsonResponse({'status': 'err'})
+
+@group_required('Author', 'Administrator')
+@require_http_methods(['POST'])
+def profUpdate(request):
+    username = request.POST['username']
+    users = User.objects.filter(username=username)
+    if len(username)==0 and len(username.split(' '))!=1 and users.exists() and request.user!=users[0]:
+        return redirect('/editor/profile')
+    user = request.user
+    user.first_name = request.POST['firstname']
+    user.last_name = request.POST['lastname']
+    user.username = request.POST['username']
+    user.save()
+    return redirect('/editor/profile')
+
+
+@login_required()
+@require_http_methods(['POST'])
+def changepassword(request):
+    info = json.load(request)
+    status = 0
+    if request.user.check_password(info['current']) and info['new']==info['confirm']:
+        request.user.set_password(info['new'])
+        request.user.save()
+        status = 1
+    data = {
+        'status': status
+    }
+    return JsonResponse(data)
+
+def signup(request):
+    if request.user.is_authenticated:
+        logout(request)
+    if request.method == 'GET':
+        return render(request, 'epage/signup.html')
+    elif request.POST['password']==request.POST['confirmpassword']:
+        nu = User()
+        nu.first_name = request.POST['firstname']
+        nu.last_name = request.POST['lastname']
+        nu.username = request.POST['username']
+        nu.email = request.POST['email']
+        nu.set_password(request.POST['password'])
+        nu.save()
+        nu.groups.add(Group.objects.get(name='Author'))
+        # nu.groups.add('Author')
+        nu.save()
+        login(request, nu)
+        return redirect(request.POST['redirect'])
