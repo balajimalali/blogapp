@@ -1,1 +1,46 @@
 {% extends 'epage/base.html' %}
+{% block mainbody %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .container h2 {
+            margin-bottom: 20px;
+        }
+        .container p {
+            margin-bottom: 15px;
+        }
+        .container a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .container a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <div class="container">
+        <h2>Unleash Your Creativity!</h2>
+        <p>Writing is a powerful tool for expression and connection. Share your thoughts, inspire others, and build a community around your ideas.</p>
+        <p>Remember, every great writer started with a single word. Today, let that word be yours.</p>
+        <a href="https://balajimalali.pythonanywhere.com/editor/posts" target="_blank">Write a New Post &rarr;</a>
+    </div>
+{% endblock %}
